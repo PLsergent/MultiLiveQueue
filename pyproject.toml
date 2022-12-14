@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "multilivequeue"
+version = "0.1.0"
+description = ""
+authors = ["Pierre-Louis Sergent <papa.louis59@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+"discord.py" = "^2.1.0"
+python-dotenv = "^0.21.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
