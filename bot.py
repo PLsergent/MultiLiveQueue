@@ -13,8 +13,7 @@ tree = app_commands.CommandTree(client)
 
 @client.event
 async def on_ready():
-    tree.add_command(captain_queue)
-    tree.add_command(random_queue)
+    tree.add_command(Queue())
     tree.add_command(leaderboard)
     tree.add_command(rank)
     await tree.sync()
