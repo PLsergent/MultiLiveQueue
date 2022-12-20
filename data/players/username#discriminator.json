@@ -1,6 +1,7 @@
 {
     "username": "username",
-    "rank": "S",
+    "in_game_username": "in_game_username",
+    "ranking": "S",
     "ranking_points": 100,
     "matches_played": 10,
     "matches_won": 10,
