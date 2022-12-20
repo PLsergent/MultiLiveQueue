@@ -6,24 +6,14 @@ PATH = "./data/"
 PATH_PLAYER = "./data/players/"
 
 class UserController():
-    def __init__(self, *args, **kwargs):
+    def __init__(self, username, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.username = ""
-        self.filename = ""
-        self.in_game_username = ""
-        self.ranking = ""
-        self.ranking_points = ""
-        self.matches_played = ""
-        self.matches_won = ""
-        self.matches_lost = ""
-        self.matches_abandoned = ""
-
-    def init_user(self, username):
         self.username = username
         self.filename = self.fix_username()
         self.in_game_username = self.get_player()["in_game_username"]
         self.ranking = self.get_player()["ranking"]
         self.ranking_points = self.get_player()["ranking_points"]
+        self.winstreak_multiplier = self.get_player()["winstreak_multiplier"]
         self.matches_played = self.get_player()["matches_played"]
         self.matches_won = self.get_player()["matches_won"]
         self.matches_lost = self.get_player()["matches_lost"]
@@ -33,8 +23,7 @@ class UserController():
         if self.is_player_registered():
             with open(PATH_PLAYER + self.filename + ".json", "r") as f:
                 return json.load(f)
-        else:
-            return self.register_player()
+        return self.register_player()
 
     def fix_username(self):
         username = self.username.replace(" ", "_")
@@ -54,8 +43,9 @@ class UserController():
                 data = {
                     "username": self.username,
                     "in_game_username": "",
-                    "rank": "D",
+                    "ranking": "D",
                     "ranking_points": 0,
+                    "winstreak_multiplier": 1,
                     "matches_played": 0,
                     "matches_won": 0,
                     "matches_lost": 0,
@@ -68,8 +58,16 @@ class UserController():
     def add_player_to_rank(self, rank):
         with open(PATH + "ranks.json", "r") as f:
             ranks = json.load(f)
-            if self.username not in ranks[rank]:
-                ranks[rank].append(self.username)
+            if self.username not in ranks[rank]["players"]:
+                ranks[rank]["players"].append(self.username)
+        with open(PATH + "ranks.json", "w") as f:
+            json.dump(ranks, f)
+    
+    def remove_player_from_rank(self, rank):
+        with open(PATH + "ranks.json", "r") as f:
+            ranks = json.load(f)
+            if self.username in ranks[rank]["players"]:
+                ranks[rank]["players"].remove(self.username)
         with open(PATH + "ranks.json", "w") as f:
             json.dump(ranks, f)
     
@@ -77,5 +75,54 @@ class UserController():
         with open(PATH_PLAYER + self.filename + ".json", "r") as f:
             data = json.load(f)
             data["in_game_username"] = username
+        with open(PATH_PLAYER + self.filename + ".json", "w") as f:
+            json.dump(data, f)
+
+    def determine_rank(self, points):
+        if points < 25:
+            return "D"
+        elif points < 50:
+            return "C"
+        elif points < 75:
+            return "B"
+        elif points < 100:
+            return "A"
+        else:
+            return "S"
+    
+    def increase_rank_points(self, points):
+        with open(PATH_PLAYER + self.filename + ".json", "r") as f:
+            data = json.load(f)
+            data["ranking_points"] += points * self.winstreak_multiplier
+            data["winstreak_multiplier"] += 0.2
+            data["matches_played"] += 1
+            data["matches_won"] += 1
+            new_rank = self.determine_rank(data["ranking_points"])
+            if new_rank != data["ranking"]:
+                self.add_player_to_rank(new_rank)
+                self.remove_player_from_rank(data["ranking"])
+            data["ranking"] = new_rank
+        with open(PATH_PLAYER + self.filename + ".json", "w") as f:
+            json.dump(data, f)
+    
+    def decrease_rank_points(self, points):
+        with open(PATH_PLAYER + self.filename + ".json", "r") as f:
+            data = json.load(f)
+            data["ranking_points"] -= points
+            data["winstreak_multiplier"] = 1
+            data["matches_played"] += 1
+            data["matches_lost"] += 1
+            new_rank = self.determine_rank(data["ranking_points"])
+            if new_rank != data["ranking"]:
+                self.add_player_to_rank(new_rank)
+                self.remove_player_from_rank(data["ranking"])
+            data["ranking"] = new_rank
+        with open(PATH_PLAYER + self.filename + ".json", "w") as f:
+            json.dump(data, f)
+    
+    def abandon_match(self):
+        with open(PATH_PLAYER + self.filename + ".json", "r") as f:
+            data = json.load(f)
+            data["matches_abandoned"] += 1
         with open(PATH_PLAYER + self.filename + ".json", "w") as f:
             json.dump(data, f)

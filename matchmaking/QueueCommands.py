@@ -4,7 +4,6 @@ from matchmaking.QueueController import QueueController
 
 @app_commands.guild_only()
 class Queue(app_commands.Group):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.queues = QueueController()

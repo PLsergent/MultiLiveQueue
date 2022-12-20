@@ -29,8 +29,7 @@ class QueueController:
     def is_in_queue(self, username):
         if username in self.casual_queue:
             return True
-        user = UserController()
-        user.init_user(username)
+        user = UserController(username)
         if username in self.ranked_queue[user.ranking]["captain_queue"] or \
             username in self.ranked_queue[user.ranking]["random_queue"]:
                 return True
@@ -39,8 +38,7 @@ class QueueController:
     def add_to_ranked_queue(self, username, queue_type):
         if self.is_in_queue(username):
             return False
-        user = UserController()
-        user.init_user(username)
+        user = UserController(username)
         self.ranked_queue[user.ranking][queue_type].append(username)
         return True
 
@@ -51,8 +49,7 @@ class QueueController:
         return True
     
     def remove_from_ranked_queue(self, username, queue_type):
-        user = UserController()
-        user.init_user(username)
+        user = UserController(username)
         if not username in self.ranked_queue[user.ranking][queue_type]:
             return False
         self.ranked_queue[user.ranking][queue_type].remove(username)
@@ -65,8 +62,7 @@ class QueueController:
         return True
     
     def get_my_queue(self, username):
-        user = UserController()
-        user.init_user(username)
+        user = UserController(username)
         if username in self.casual_queue:
             return self.casual_queue
         if username in self.ranked_queue[user.ranking]["captain_queue"]:

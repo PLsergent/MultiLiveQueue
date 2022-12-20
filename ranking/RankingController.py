@@ -10,8 +10,8 @@ class RankingController:
         with open(PATH + "ranks.json", "r") as f:
             ranks = json.load(f)
         leaderboard = []
-        for _, players in ranks.items():
-            leaderboard.extend(players)
+        for _, item in ranks.items():
+            leaderboard.extend(item["players"])
             if len(leaderboard) >= 10:
                 break
         # return first 10 players
@@ -23,7 +23,6 @@ class RankingController:
         return ranks[rank]
     
     def get_my_rank(self, username):
-        user = UserController()
-        user.init_user(username)
+        user = UserController(username)
         return user.ranking
         
