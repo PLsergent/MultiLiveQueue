@@ -1,0 +1,8 @@
+{
+    "id": "bd65600d-8669-4903-8a14-af88203add38",
+    "queue_type": "casual",
+    "players": ["username1", "username2", "username3", "username4"],
+    "status": "Init",
+    "team1": [],
+    "team2": []
+}

@@ -1,4 +1,6 @@
+import uuid
 from user.UserController import UserController
+from match.MatchController import MatchController
 
 class QueueController:
     def __init__(self):
@@ -69,4 +71,22 @@ class QueueController:
             return self.ranked_queue[user.ranking]["captain_queue"]
         if username in self.ranked_queue[user.ranking]["random_queue"]:
             return self.ranked_queue[user.ranking]["random_queue"]
+        return None
+    
+    def check_if_match_ready(self, username, queue_type):
+        user = UserController(username)
+        if queue_type == "casual":
+            if len(self.casual_queue) == 4:
+                game_id = str(uuid.uuid4())
+                match = MatchController(game_id, queue_type=queue_type, players=self.casual_queue)
+                match.create_teams()
+                self.casual_queue = []
+                return match
+        else:
+            if len(self.ranked_queue[user.ranking][queue_type]) == 4:
+                game_id = str(uuid.uuid4())
+                match = MatchController(game_id, queue_type=queue_type, players=self.ranked_queue[user.ranking][queue_type])
+                match.create_teams()
+                self.ranked_queue[user.ranking][queue_type] = []
+                return match
         return None

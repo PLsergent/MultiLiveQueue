@@ -10,14 +10,16 @@ class UserController():
         super().__init__(*args, **kwargs)
         self.username = username
         self.filename = self.fix_username()
-        self.in_game_username = self.get_player()["in_game_username"]
-        self.ranking = self.get_player()["ranking"]
-        self.ranking_points = self.get_player()["ranking_points"]
-        self.winstreak_multiplier = self.get_player()["winstreak_multiplier"]
-        self.matches_played = self.get_player()["matches_played"]
-        self.matches_won = self.get_player()["matches_won"]
-        self.matches_lost = self.get_player()["matches_lost"]
-        self.matches_abandoned = self.get_player()["matches_abandoned"]
+        player = self.get_player()
+        self.in_game_username = player["in_game_username"]
+        self.ranking = player["ranking"]
+        self.ranking_points = player["ranking_points"]
+        self.winstreak_multiplier = player["winstreak_multiplier"]
+        self.current_game_id = player["current_game_id"]
+        self.matches_played = player["matches_played"]
+        self.matches_won = player["matches_won"]
+        self.matches_lost = player["matches_lost"]
+        self.matches_abandoned = player["matches_abandoned"]
 
     def get_player(self):
         if self.is_player_registered():
@@ -46,6 +48,7 @@ class UserController():
                     "ranking": "D",
                     "ranking_points": 0,
                     "winstreak_multiplier": 1,
+                    "current_game_id": "",
                     "matches_played": 0,
                     "matches_won": 0,
                     "matches_lost": 0,
@@ -77,6 +80,13 @@ class UserController():
             data["in_game_username"] = username
         with open(PATH_PLAYER + self.filename + ".json", "w") as f:
             json.dump(data, f)
+    
+    def add_current_game_id(self, game_id):
+        with open(PATH_PLAYER + self.filename + ".json", "r") as f:
+            data = json.load(f)
+            data["current_game_id"] = game_id
+        with open(PATH_PLAYER + self.filename + ".json", "w") as f:
+            json.dump(data, f)
 
     def determine_rank(self, points):
         if points < 25:
@@ -95,6 +105,7 @@ class UserController():
             data = json.load(f)
             data["ranking_points"] += points * self.winstreak_multiplier
             data["winstreak_multiplier"] += 0.2
+            data["current_game_id"] = ""
             data["matches_played"] += 1
             data["matches_won"] += 1
             new_rank = self.determine_rank(data["ranking_points"])
@@ -110,6 +121,7 @@ class UserController():
             data = json.load(f)
             data["ranking_points"] -= points
             data["winstreak_multiplier"] = 1
+            data["current_game_id"] = ""
             data["matches_played"] += 1
             data["matches_lost"] += 1
             new_rank = self.determine_rank(data["ranking_points"])
@@ -124,5 +136,6 @@ class UserController():
         with open(PATH_PLAYER + self.filename + ".json", "r") as f:
             data = json.load(f)
             data["matches_abandoned"] += 1
+            data["current_game_id"] = ""
         with open(PATH_PLAYER + self.filename + ".json", "w") as f:
             json.dump(data, f)

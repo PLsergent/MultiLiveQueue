@@ -8,14 +8,16 @@ from user.UserController import UserController
 PATH_MATCH = "./data/matches/"
 
 class MatchController:
-    def __init__(self, uuid, queue_type=None, players=None):
+    def __init__(self, uuid: str, queue_type=None, players=None):
         if not queue_type and not players:
-            self.id = self.get_match(uuid)["id"]
-            self.players = self.get_match(uuid)["players"]
-            self.queue_type = self.get_match(uuid)["queue_type"]
-            self.status = self.get_match(uuid)["status"]
-            self.team1 = self.get_match(uuid)["team1"]
-            self.team2 = self.get_match(uuid)["team2"]
+            match = self.get_match(uuid)
+            self.id = match["id"]
+            self.players = match["players"]
+            self.available_players = self.players
+            self.queue_type = match["queue_type"]
+            self.status = match["status"]
+            self.team1 = match["team1"]
+            self.team2 = match["team2"]
         else:
             self.id = uuid
             self.queue_type = queue_type
@@ -53,28 +55,28 @@ class MatchController:
             return data
     
     def create_teams(self):
-        random.shuffle(self.players)
-        if self.queue_type == "random":
+        random.shuffle(self.available_players)
+        if self.queue_type == "random_queue":
             self.create_random_teams()
-        elif self.queue_type == "captain":
+        elif self.queue_type == "captain_queue":
             self.create_captain_teams()
         self.status = "Ready"
     
     def create_random_teams(self):
-        self.team1 = self.players[:2]
-        self.team2 = self.players[2:]
-        self.players = []
+        self.team1 = self.available_players[:2]
+        self.team2 = self.available_players[2:]
+        self.available_players = []
     
     def create_captain_teams(self):
-        self.team1 = [self.players[0]]
-        self.players = self.players[1:]
+        self.team1 = [self.available_players[0]]
+        self.available_players = self.available_players[1:]
     
     def pick_mate(self, username):
-        if self.queue_type == "captain":
+        if self.queue_type == "captain_queue":
             self.team1.append(username)
-            self.players.remove(username)
-            self.team2 = self.players
-            self.players = []
+            self.available_players.remove(username)
+            self.team2 = self.available_players
+            self.available_players = []
     
     def get_teams(self):
         return (self.team1, self.team2)
@@ -101,14 +103,12 @@ class MatchController:
     
     def increase_rank_points(self, team, diff):
         for player in team:
-            user = UserController()
-            user.init_user(player)
+            user = UserController(player)
             user.increase_rank_points(diff)
     
     def decrease_rank_points(self, team, diff):
         for player in team:
-            user = UserController()
-            user.init_user(player)
+            user = UserController(player)
             user.decrease_rank_points(diff)
 
 

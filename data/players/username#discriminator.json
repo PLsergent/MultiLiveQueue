@@ -3,6 +3,8 @@
     "in_game_username": "in_game_username",
     "ranking": "S",
     "ranking_points": 100,
+    "winstreak_multiplier": 1,
+    "current_game_id": "",
     "matches_played": 10,
     "matches_won": 10,
     "matches_lost": 0,
