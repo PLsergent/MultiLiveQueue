@@ -1,14 +1,13 @@
-from discord import app_commands
-from discord import Embed
-from discord import Member
-from discord import utils
+import discord
+from discord import app_commands, Embed
 from matchmaking.QueueController import QueueController
 from user.UserController import UserController
 
 
 @app_commands.guild_only()
 class Queue(app_commands.Group):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, client, *args, **kwargs):
+        self.client = client
         super().__init__(*args, **kwargs)
         self.queues = QueueController()
     
@@ -31,7 +30,7 @@ class Queue(app_commands.Group):
         if match:
             captain_username = match.team1[0]
             embed = Embed(title="🎉 Match ready !", description=f"👾 {match.id}, Captain: {captain_username}", color=0x64e4f5)
-            await ctx.response.send_message(embed=embed)
+            await ctx.followup.send(embed=embed)
             # send ephemeral message to captain to pick a teamate
             captain = ctx.guild.get_member_named(captain_username)
             teamates = '*🙋‍♂️ Discord Username  |  👾 Multiversus Gamertag*\n\n' + '\n'.join(f'🙋‍♂️ {currentUser}  |  👾 {UserController(currentUser).in_game_username}' for currentUser in match.available_players)
@@ -53,26 +52,31 @@ class Queue(app_commands.Group):
         match = self.queues.check_if_match_ready(username, "random_queue")
         if match:
             embed = Embed(title="🎉 Match ready !", description=f"👾 {match.id}", color=0x64e4f5)
-            await ctx.response.send_message(embed=embed)
+            await ctx.followup.send(embed=embed)
             await self.create_match_category_and_channels()
 
     @app_commands.command(name="casual", description="Queue for a casual match")
     async def casual(self, ctx):
         username = ctx.user.name + "#" + ctx.user.discriminator
+
         if not self.queues.add_to_casual_queue(username):
             embed = Embed(title=f"⚠️ {username}, you are already in a queue!", color=0x64e4f5)
             await ctx.response.send_message(embed=embed)
             return
         message = '*🙋‍♂️ Discord Username  |  👾 Multiversus Gamertag*\n\n' + '\n'.join(f'🙋‍♂️ {currentUser}  |  👾 {UserController(currentUser).in_game_username}' for currentUser in self.queues.get_my_queue(username))
 
-        embed = Embed(title="🆕 challenger to the *ranked random* queue !", description=message, color=0x76d964)
+        embed = Embed(title="🆕 challenger to the *casual* queue !", description=message, color=0x76d964)
         await ctx.response.send_message(embed=embed)
-
+        
         match = self.queues.check_if_match_ready(username, "casual")
         if match:
+            users_team1 = [discord.utils.get(ctx.guild.members, name=member.split("#")[0], discriminator=member.split("#")[1]) for member in match.team1]
+            members_team1 = [ctx.guild.get_member(user.id) for user in users_team1]
+            users_team2 = [discord.utils.get(ctx.guild.members, name=member.split("#")[0], discriminator=member.split("#")[1]) for member in match.team2]
+            members_team2 = [ctx.guild.get_member(user.id) for user in users_team2]
             embed = Embed(title="🎉 Match ready !", description=f"👾 {match.id}", color=0x64e4f5)
-            await ctx.response.send_message(embed=embed)
-            await self.create_match_category_and_channels()
+            await ctx.followup.send(embed=embed)
+            await self.create_match_category_and_channels(ctx.guild_id, match, members_team1, members_team2)
 
     @app_commands.command(name="leave", description="Leave the queue")
     async def leave(self, ctx):
@@ -105,22 +109,24 @@ class Queue(app_commands.Group):
         embed = Embed(title=f"ℹ️ {username}, you are in a queue ! Wait for the battle", description=message, color=0x64e4f5)
         await ctx.response.send_message(embed=embed)
     
-    async def create_match_category_and_channels(self, guild, match):
-        category = await guild.create_category(f"Match {match.id}")
-        for player in match.players:
-            member = await guild.get_member_named(player)
-            await category.set_permissions(member, read_messages=True, send_messages=True)
+    async def create_match_category_and_channels(self, guild_id, match, team1, team2):
+        guild = await self.client.fetch_guild(guild_id)
+        everyone = guild.default_role
+        overwrites = {
+            everyone: discord.PermissionOverwrite.from_pair(deny=discord.Permissions.all(), allow=[])
+        }
+        category = await guild.create_category(f"Match {match.id}", overwrites=overwrites)
+       
     
-        team1_text_channel = await guild.create_text_channel(f"Match {match.id} - Team 1", category=category)
-        team1_voice_channel = await guild.create_voice_channel(f"Match {match.id} - Team 1", category=category)
-        for player in match.team1:
-            member = await guild.get_member_named(player)
+        team1_text_channel = await guild.create_text_channel(f"Team 1", category=category)
+        team1_voice_channel = await guild.create_voice_channel(f"Team 1", category=category)
+
+        for member in team1:
             await team1_text_channel.set_permissions(member, read_messages=True, send_messages=True)
-            await team1_voice_channel.set_permissions(member)
+            await team1_voice_channel.set_permissions(member, connect=True, speak=True, view_channel=True)
         
-        team2_text_channel = await guild.create_text_channel(f"Match {match.id} - Team 2", category=category)
-        team2_voice_channel = await guild.create_voice_channel(f"Match {match.id} - Team 2", category=category)
-        for player in match.team2:
-            member = await guild.get_member_named(player)
+        team2_text_channel = await guild.create_text_channel(f"Team 2", category=category)
+        team2_voice_channel = await guild.create_voice_channel(f"Team 2", category=category)
+        for member in team2:
             await team2_text_channel.set_permissions(member, read_messages=True, send_messages=True)
-            await team2_voice_channel.set_permissions(member)
+            await team2_voice_channel.set_permissions(member, connect=True, speak=True, view_channel=True)

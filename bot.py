@@ -11,15 +11,13 @@ load_dotenv()
 
 intents = discord.Intents.default()
 intents.members = True
-intents.dm_typing = True
-intents.dm_messages = True
 
 client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
 
 @client.event
 async def on_ready():
-    tree.add_command(Queue())
+    tree.add_command(Queue(client))
     tree.add_command(User())
     tree.add_command(Rank())
     tree.add_command(Match())

@@ -10,6 +10,7 @@ PATH_MATCH = "./data/matches/"
 class MatchController:
     def __init__(self, uuid: str, queue_type=None, players=None):
         if not queue_type and not players:
+            # Match already exists
             match = self.get_match(uuid)
             self.id = match["id"]
             self.players = match["players"]
@@ -19,8 +20,10 @@ class MatchController:
             self.team1 = match["team1"]
             self.team2 = match["team2"]
         else:
+            # New match
             self.id = uuid
             self.queue_type = queue_type
+            self.available_players = players
             self.players = players
             self.status = "Init"
             self.team1 = []
@@ -47,6 +50,7 @@ class MatchController:
                     "id": self.id,
                     "queue_type": self.queue_type,
                     "players": self.players,
+                    "available_players": self.available_players,
                     "status": "Waiting",
                     "team1": [],
                     "team2": [],
@@ -56,7 +60,7 @@ class MatchController:
     
     def create_teams(self):
         random.shuffle(self.available_players)
-        if self.queue_type == "random_queue":
+        if self.queue_type == "random_queue" or self.queue_type == "casual":
             self.create_random_teams()
         elif self.queue_type == "captain_queue":
             self.create_captain_teams()
