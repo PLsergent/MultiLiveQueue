@@ -51,9 +51,13 @@ class Queue(app_commands.Group):
 
         match = self.queues.check_if_match_ready(username, "random_queue")
         if match:
+            users_team1 = [discord.utils.get(ctx.guild.members, name=member.split("#")[0], discriminator=member.split("#")[1]) for member in match.team1]
+            members_team1 = [ctx.guild.get_member(user.id) for user in users_team1]
+            users_team2 = [discord.utils.get(ctx.guild.members, name=member.split("#")[0], discriminator=member.split("#")[1]) for member in match.team2]
+            members_team2 = [ctx.guild.get_member(user.id) for user in users_team2]
             embed = Embed(title="🎉 Match ready !", description=f"👾 {match.id}", color=0x64e4f5)
             await ctx.followup.send(embed=embed)
-            await self.create_match_category_and_channels()
+            await self.create_match_category_and_channels(ctx.guild_id, match, members_team1, members_team2)
 
     @app_commands.command(name="casual", description="Queue for a casual match")
     async def casual(self, ctx):
