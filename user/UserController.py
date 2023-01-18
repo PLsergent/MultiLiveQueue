@@ -75,18 +75,12 @@ class UserController():
             json.dump(ranks, f)
     
     def add_ingame_username(self, username):
-        with open(PATH_PLAYER + self.filename + ".json", "r") as f:
-            data = json.load(f)
-            data["in_game_username"] = username
-        with open(PATH_PLAYER + self.filename + ".json", "w") as f:
-            json.dump(data, f)
+        self.in_game_username = username
+        self.write_user()
     
     def add_current_game_id(self, game_id):
-        with open(PATH_PLAYER + self.filename + ".json", "r") as f:
-            data = json.load(f)
-            data["current_game_id"] = game_id
-        with open(PATH_PLAYER + self.filename + ".json", "w") as f:
-            json.dump(data, f)
+        self.current_game_id = game_id
+        self.write_user()
 
     def determine_rank(self, points):
         if points < 25:
@@ -101,41 +95,48 @@ class UserController():
             return "S"
     
     def increase_rank_points(self, points):
-        with open(PATH_PLAYER + self.filename + ".json", "r") as f:
-            data = json.load(f)
-            data["ranking_points"] += points * self.winstreak_multiplier
-            data["winstreak_multiplier"] += 0.2
-            data["current_game_id"] = ""
-            data["matches_played"] += 1
-            data["matches_won"] += 1
-            new_rank = self.determine_rank(data["ranking_points"])
-            if new_rank != data["ranking"]:
-                self.add_player_to_rank(new_rank)
-                self.remove_player_from_rank(data["ranking"])
-            data["ranking"] = new_rank
-        with open(PATH_PLAYER + self.filename + ".json", "w") as f:
-            json.dump(data, f)
+        self.ranking_points += points * self.winstreak_multiplier
+        self.winstreak_multiplier += 0.2
+        self.current_game_id = ""
+        self.matches_played += 1
+        self.matches_won += 1
+        new_rank = self.determine_rank(self.ranking_points)
+        if new_rank != self.ranking:
+            self.add_player_to_rank(new_rank)
+            self.remove_player_from_rank(self.ranking)
+        self.ranking = new_rank
+        self.write_user()
     
     def decrease_rank_points(self, points):
-        with open(PATH_PLAYER + self.filename + ".json", "r") as f:
-            data = json.load(f)
-            data["ranking_points"] -= points
-            data["winstreak_multiplier"] = 1
-            data["current_game_id"] = ""
-            data["matches_played"] += 1
-            data["matches_lost"] += 1
-            new_rank = self.determine_rank(data["ranking_points"])
-            if new_rank != data["ranking"]:
-                self.add_player_to_rank(new_rank)
-                self.remove_player_from_rank(data["ranking"])
-            data["ranking"] = new_rank
-        with open(PATH_PLAYER + self.filename + ".json", "w") as f:
-            json.dump(data, f)
+        self.ranking_points -= points
+        self.winstreak_multiplier = 1
+        self.current_game_id = ""
+        self.matches_played += 1
+        self.matches_lost += 1
+        new_rank = self.determine_rank(self.ranking_points)
+        if new_rank != self.ranking:
+            self.add_player_to_rank(new_rank)
+            self.remove_player_from_rank(self.ranking)
+        self.ranking = new_rank
+        self.write_user()
     
     def abandon_match(self):
-        with open(PATH_PLAYER + self.filename + ".json", "r") as f:
-            data = json.load(f)
-            data["matches_abandoned"] += 1
-            data["current_game_id"] = ""
-        with open(PATH_PLAYER + self.filename + ".json", "w") as f:
+        self.matches_abandoned += 1
+        self.current_game_id = ""
+        self.write_user()
+    
+    def write_user(self):
+        with(open(PATH_PLAYER + self.filename + ".json", "w")) as f:
+            data = {
+                "username": self.username,
+                "in_game_username": self.in_game_username,
+                "ranking": self.ranking,
+                "ranking_points": self.ranking_points,
+                "winstreak_multiplier": self.winstreak_multiplier,
+                "current_game_id": self.current_game_id,
+                "matches_played": self.matches_played,
+                "matches_won": self.matches_won,
+                "matches_lost": self.matches_lost,
+                "matches_abandoned": self.matches_abandoned,
+            }
             json.dump(data, f)

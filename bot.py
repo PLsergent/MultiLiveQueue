@@ -20,7 +20,7 @@ async def on_ready():
     tree.add_command(Queue(client))
     tree.add_command(User())
     tree.add_command(Rank())
-    tree.add_command(Match())
+    tree.add_command(Match(client))
     await tree.sync()
     print("Bot is ready!")
 

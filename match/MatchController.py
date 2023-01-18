@@ -65,15 +65,18 @@ class MatchController:
         elif self.queue_type == "captain_queue":
             self.create_captain_teams()
         self.status = "Ready"
+        self.write_match()
     
     def create_random_teams(self):
         self.team1 = self.available_players[:2]
         self.team2 = self.available_players[2:]
         self.available_players = []
+        self.write_match()
     
     def create_captain_teams(self):
         self.team1 = [self.available_players[0]]
         self.available_players = self.available_players[1:]
+        self.write_match()
     
     def pick_mate(self, username):
         if self.queue_type == "captain_queue":
@@ -81,6 +84,8 @@ class MatchController:
             self.available_players.remove(username)
             self.team2 = self.available_players
             self.available_players = []
+            self.status = "Ready"
+            self.write_match()
     
     def get_teams(self):
         return (self.team1, self.team2)
@@ -94,6 +99,7 @@ class MatchController:
             self.increase_rank_points(self.team2, diff)
             self.decrease_rank_points(self.team1, diff)
         self.status = "Finished"
+        self.write_match()
     
     def report_loser(self, username, knockouts_winner, knockouts_loser):
         diff = knockouts_winner - knockouts_loser
@@ -104,6 +110,7 @@ class MatchController:
             self.decrease_rank_points(self.team2, diff)
             self.increase_rank_points(self.team1, diff)
         self.status = "Finished"
+        self.write_match()
     
     def increase_rank_points(self, team, diff):
         for player in team:
@@ -115,4 +122,20 @@ class MatchController:
             user = UserController(player)
             user.decrease_rank_points(diff)
 
-
+    def write_match(self):
+        with open(PATH_MATCH + self.id + ".json", "w+") as f:
+            data = {
+                "id": self.id,
+                "queue_type": self.queue_type,
+                "players": self.players,
+                "available_players": self.available_players,
+                "status": self.status,
+                "team1": self.team1,
+                "team2": self.team2,
+            }
+            json.dump(data, f)
+        return data
+    
+    def delete_match(self):
+        if self.is_match_registered():
+            os.remove(PATH_MATCH + self.id + ".json")

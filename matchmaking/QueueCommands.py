@@ -16,8 +16,8 @@ class Queue(app_commands.Group):
     @ranked.command(name="captain_queue", description="Queue for a match as a captain")
     async def captain(self, ctx):
         username = ctx.user.name + "#" + ctx.user.discriminator
-        if not self.queues.add_to_ranked_queue(username, "captain_queue"):
-            embed = Embed(title=f"⚠️ {username}, you are already in a queue!", color=0x64e4f5)
+        if not self.queue_check(username):
+            embed = self.queue_check(username)
             await ctx.response.send_message(embed=embed)
             return
         
@@ -31,19 +31,20 @@ class Queue(app_commands.Group):
             captain_username = match.team1[0]
             embed = Embed(title="🎉 Match ready !", description=f"👾 {match.id}, Captain: {captain_username}", color=0x64e4f5)
             await ctx.followup.send(embed=embed)
-            # send ephemeral message to captain to pick a teamate
+            # send ephemeral message to captain to pick a teammate
             captain = ctx.guild.get_member_named(captain_username)
-            teamates = '*🙋‍♂️ Discord Username  |  👾 Multiversus Gamertag*\n\n' + '\n'.join(f'🙋‍♂️ {currentUser}  |  👾 {UserController(currentUser).in_game_username}' for currentUser in match.available_players)
-            embed_dm = Embed(title="Pick a teamate:", description=teamates, color=0x64e4f5)
+            teammates = '*🙋‍♂️ Discord Username  |  👾 Multiversus Gamertag*\n\n' + '\n'.join(f'🙋‍♂️ {currentUser}  |  👾 {UserController(currentUser).in_game_username}' for currentUser in match.available_players)
+            embed_dm = Embed(title="Pick a teammate:", description=teammates, color=0x64e4f5)
             await captain.send(embed=embed_dm, ephemeral=True)
 
     @ranked.command(name="random_queue", description="Randomly match with someone")
     async def random(self, ctx):
         username = ctx.user.name + "#" + ctx.user.discriminator
-        if not self.queues.add_to_ranked_queue(username, "random_queue"):
-            embed = Embed(title=f"⚠️ {username}, you are already in a queue!", color=0x64e4f5)
+        if not self.queue_check(username):
+            embed = self.queue_check(username)
             await ctx.response.send_message(embed=embed)
             return
+
         message = '*🙋‍♂️ Discord Username  |  👾 Multiversus Gamertag*\n\n' + '\n'.join(f'🙋‍♂️ {currentUser}  |  👾 {UserController(currentUser).in_game_username}' for currentUser in self.queues.get_my_queue(username))
 
         embed = Embed(title="🆕 challenger to the *ranked random* queue !", description=message, color=0xd96664)
@@ -62,11 +63,11 @@ class Queue(app_commands.Group):
     @app_commands.command(name="casual", description="Queue for a casual match")
     async def casual(self, ctx):
         username = ctx.user.name + "#" + ctx.user.discriminator
-
-        if not self.queues.add_to_casual_queue(username):
-            embed = Embed(title=f"⚠️ {username}, you are already in a queue!", color=0x64e4f5)
+        if not self.queue_check(username):
+            embed = self.queue_check(username)
             await ctx.response.send_message(embed=embed)
             return
+        
         message = '*🙋‍♂️ Discord Username  |  👾 Multiversus Gamertag*\n\n' + '\n'.join(f'🙋‍♂️ {currentUser}  |  👾 {UserController(currentUser).in_game_username}' for currentUser in self.queues.get_my_queue(username))
 
         embed = Embed(title="🆕 challenger to the *casual* queue !", description=message, color=0x76d964)
@@ -113,6 +114,17 @@ class Queue(app_commands.Group):
         embed = Embed(title=f"ℹ️ {username}, you are in a queue ! Wait for the battle", description=message, color=0x64e4f5)
         await ctx.response.send_message(embed=embed)
     
+    def queue_check(self, username):
+        user = UserController(username)
+        embed = None
+        if self.queues.is_in_queue(username):
+            embed = Embed(title=f"⚠️ {username}, you are already in a queue!", color=0x64e4f5)
+        if user.current_game_id != "":
+            embed = Embed(title=f"⚠️ {username}, you are already in a game!", color=0x64e4f5)
+        if user.in_game_username == "":
+            embed = Embed(title=f"⚠️ {username}, you need to set your in-game username first!", color=0x64e4f5)
+        return embed
+
     async def create_match_category_and_channels(self, guild_id, match, team1, team2):
         guild = await self.client.fetch_guild(guild_id)
         everyone = guild.default_role
