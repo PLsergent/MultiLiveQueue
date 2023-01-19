@@ -31,7 +31,9 @@ class Queue(app_commands.Group):
         match = self.queues.check_if_match_ready(username, "captain_queue")
         if match:
             captain_username = match.team1[0]
-            embed = Embed(title="🎉 Match ready! Please pick a teammate", description=f"👾 {match.id}, Captain: **{captain_username}**", color=0x64e4f5)
+            user_captain = discord.utils.get(ctx.guild.members, name=captain_username.split("#")[0], discriminator=captain_username.split("#")[1])
+            embed = Embed(title="🎉 Match ready! Please pick a teammate", description=f"👾 Match id: {match.id}", color=0x64e4f5)
+            embed.add_field(name="Captain", value=f"🙋‍♂️ {user_captain.mention}  |  👾 {UserController(captain_username).in_game_username}")
             await ctx.followup.send(embed=embed)
 
     @ranked.command(name="random_queue", description="Randomly match with someone")
@@ -55,7 +57,7 @@ class Queue(app_commands.Group):
             members_team1 = [ctx.guild.get_member(user.id) for user in users_team1]
             users_team2 = [discord.utils.get(ctx.guild.members, name=member.split("#")[0], discriminator=member.split("#")[1]) for member in match.team2]
             members_team2 = [ctx.guild.get_member(user.id) for user in users_team2]
-            embed = Embed(title="🎉 Match ready !", description=f"👾 {match.id}", color=0x64e4f5)
+            embed = Embed(title="🎉 Match ready !", description=f"👾 Match id: {match.id}", color=0x64e4f5)
             await ctx.followup.send(embed=embed)
             await self.create_match_category_and_channels(ctx.guild_id, match, members_team1, members_team2)
 
@@ -80,7 +82,7 @@ class Queue(app_commands.Group):
             members_team1 = [ctx.guild.get_member(user.id) for user in users_team1]
             users_team2 = [discord.utils.get(ctx.guild.members, name=member.split("#")[0], discriminator=member.split("#")[1]) for member in match.team2]
             members_team2 = [ctx.guild.get_member(user.id) for user in users_team2]
-            embed = Embed(title="🎉 Match ready !", description=f"👾 {match.id}", color=0x64e4f5)
+            embed = Embed(title="🎉 Match ready !", description=f"👾 Match id: {match.id}", color=0x64e4f5)
             await ctx.followup.send(embed=embed)
             await self.create_match_category_and_channels(ctx.guild_id, match, members_team1, members_team2)
 

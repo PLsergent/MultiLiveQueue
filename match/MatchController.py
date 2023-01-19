@@ -121,6 +121,28 @@ class MatchController:
         for player in team:
             user = UserController(player)
             user.decrease_rank_points(diff)
+    
+    def abandon_match(self, username):
+        if username in self.available_players:
+            self.available_players.remove(username)
+        if username in self.team1:
+            self.team1.remove(username)
+        if username in self.team2:
+            self.team2.remove(username)
+        if username in self.players:
+            self.players.remove(username)
+        if len(self.team1) == 0 and len(self.team2) == 0:
+            self.status = "Abandoned"
+            self.delete_match()
+            return True
+        if self.players == []:
+            self.delete_match()
+            return True
+        user = UserController(username)
+        user.abandon_match()
+        user.write_user()       
+        self.write_match()
+        return False
 
     def write_match(self):
         with open(PATH_MATCH + self.id + ".json", "w+") as f:

@@ -95,6 +95,19 @@ class Match(app_commands.Group):
         embed = Embed(title=f"✅ You deleted the match channels.", color=0x64e4f5)
         await ctx.response.send_message(embed=embed)
     
+    @app_commands.command(name="abandon", description="Abandon match")
+    async def abandon(self, ctx):
+        username = ctx.user.name + "#" + ctx.user.discriminator
+        match = self.get_match_for_user(username)
+        if match is None:
+            embed = Embed(title=f"⚠️ {username}, you are not in a match!", color=0x64e4f5)
+            await ctx.response.send_message(embed=embed)
+            return
+        
+        match.abandon_match(username)
+        embed = Embed(title=f"✅ You abandoned this match.", color=0x64e4f5)
+        await ctx.response.send_message(embed=embed)
+    
     async def delete_match_category_and_channels(self, guild_id, match):
         guild = self.client.get_guild(guild_id)
         category = discord.utils.get(guild.categories, name=f"Match {match.id}")
