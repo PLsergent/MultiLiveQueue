@@ -1,36 +1,26 @@
-# 👋 Welcome to A Product
+---
+layout: landing
+---
+
+# ⚔ MultiLiveQueue
 
 {% hint style="info" %}
-**GitBook tip:** your product docs aren't just a reference of all your features! use them to encourage folks to perform certain actions and discover the value in your product.
+Match-making and ranking Discord bot for Multiversus
 {% endhint %}
 
-## Overview
+{% embed url="https://github.com/PLsergent/MuLIVErsus" %}
+GitHub repo
+{% endembed %}
 
-Here are a couple of example overviews from products with really great docs:
+<table data-view="cards"><thead><tr><th></th><th></th><th></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td></td><td>Invite MultiLiveQueue to your server and compete with your friends <span data-gb-custom-inline data-tag="emoji" data-code="1f3b2">🎲</span></td><td></td><td><a href=".gitbook/assets/multiversus-key-art-dessin.jpg">multiversus-key-art-dessin.jpg</a></td></tr><tr><td></td><td>Join a queue to climb your way up on your server <span data-gb-custom-inline data-tag="emoji" data-code="1f199">🆙</span> Keep track of your stats <span data-gb-custom-inline data-tag="emoji" data-code="1f4ca">📊</span></td><td></td><td><a href=".gitbook/assets/Marvin.png">Marvin.png</a></td></tr><tr><td></td><td>Talk to your mate with the match voice/text channels created <span data-gb-custom-inline data-tag="emoji" data-code="1f389">🎉</span></td><td></td><td><a href=".gitbook/assets/Discord-logo.png">Discord-logo.png</a></td></tr></tbody></table>
 
-> Loom is a video messaging tool that helps you get your message across through instantly shareable videos.
->
-> With Loom, you can record your camera, microphone, and desktop simultaneously. Your video is then instantly available to share through Loom's patented technology.
->
-> — From the [Loom Docs](https://support.loom.com/hc/en-us/articles/360002158057-What-is-Loom-)
+## Usage overview
 
-> The Mailchimp Marketing API provides programmatic access to Mailchimp data and functionality, allowing developers to build custom features to do things like sync email activity and campaign analytics with their database, manage audiences and campaigns, and more.
->
-> — From the [Mailchimp Marketing API docs](https://mailchimp.com/developer/marketing/docs/fundamentals/)
-
-## Quick links
-
-{% content-ref url="broken-reference" %}
-[Broken link](broken-reference)
+{% content-ref url="start-here.md" %}
+[start-here.md](start-here.md)
 {% endcontent-ref %}
 
-{% content-ref url="broken-reference" %}
-[Broken link](broken-reference)
-{% endcontent-ref %}
-
-## Get Started
-
-We've put together some helpful guides for you to get setup with our product quickly and easily.
+## Learn about the commands
 
 {% content-ref url="broken-reference" %}
 [Broken link](broken-reference)
@@ -43,3 +33,11 @@ We've put together some helpful guides for you to get setup with our product qui
 {% content-ref url="broken-reference" %}
 [Broken link](broken-reference)
 {% endcontent-ref %}
+
+{% content-ref url="broken-reference" %}
+[Broken link](broken-reference)
+{% endcontent-ref %}
+
+## More MultiVersus stats here
+
+{% embed url="https://muliversus.plsergent.xyz/" %}

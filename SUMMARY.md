@@ -1,7 +1,6 @@
 # Table of contents
 
-* [👋 Welcome to A Product](README.md)
-* [⚔ MultiLiveQueue](readme.md)
+* [⚔ MultiLiveQueue](README.md)
 * [🤸 Start here](start-here.md)
 
 ## 🦸 User
@@ -15,13 +14,13 @@
 * [Ranking points](ranking/ranking-points.md)
 * [Leaderboard](ranking/leaderboard.md)
 
-## 🥳 Queue
+## 🥳 Matchmaking
 
-* [Queue commands](queue/queue-commands.md)
-* [Casual](queue/casual.md)
-* [Rank queue](queue/rank-queue/README.md)
-  * [Random queue](queue/rank-queue/random-queue.md)
-  * [Captain queue](queue/rank-queue/captain-queue.md)
+* [Queue commands](matchmaking/queue-commands.md)
+* [Casual](matchmaking/casual.md)
+* [Rank queue](matchmaking/rank-queue/README.md)
+  * [Random queue](matchmaking/rank-queue/random-queue.md)
+  * [Captain queue](matchmaking/rank-queue/captain-queue.md)
 
 ## 💢 Match
 
