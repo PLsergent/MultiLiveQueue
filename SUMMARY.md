@@ -1,24 +1,29 @@
 # Table of contents
 
 * [👋 Welcome to A Product](README.md)
+* [⚔ MultiLiveQueue](readme.md)
+* [🤸 Start here](start-here.md)
 
-## Overview
+## 🦸 User
 
-* [💡 What we do](overview/what-we-do.md)
-* [✨ Our Features](overview/our-features.md)
+* [User commands](user/user-commands.md)
+* [Steps before queuing](user/steps-before-queuing.md)
 
-## Product Guides
+## 🤓 Ranking
 
-* [📪 Making a post](product-guides/making-a-post.md)
-* [📎 Understanding Projects](product-guides/understanding-projects.md)
+* [Rank commands](ranking/rank-commands.md)
+* [Ranking points](ranking/ranking-points.md)
+* [Leaderboard](ranking/leaderboard.md)
 
-## Fundamentals
+## 🥳 Queue
 
-* [🛠 Getting set up](fundamentals/getting-set-up/README.md)
-  * [📝 Setting permissions](fundamentals/getting-set-up/setting-permissions.md)
-  * [🧑 Inviting Members](fundamentals/getting-set-up/inviting-members.md)
+* [Queue commands](queue/queue-commands.md)
+* [Casual](queue/casual.md)
+* [Rank queue](queue/rank-queue/README.md)
+  * [Random queue](queue/rank-queue/random-queue.md)
+  * [Captain queue](queue/rank-queue/captain-queue.md)
 
-## Use Cases
+## 💢 Match
 
-* [🎨 For Designers](use-cases/for-designers.md)
-* [🖥 For Developers](use-cases/for-developers.md)
+* [Match commands](match/match-commands.md)
+* [Points calculation](match/points-calculation.md)
