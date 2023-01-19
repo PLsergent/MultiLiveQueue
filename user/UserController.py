@@ -109,6 +109,8 @@ class UserController():
     
     def decrease_rank_points(self, points):
         self.ranking_points -= points
+        if self.ranking_points < 0:
+            self.ranking_points = 0
         self.winstreak_multiplier = 1
         self.current_game_id = ""
         self.matches_played += 1
@@ -123,6 +125,10 @@ class UserController():
     def abandon_match(self):
         self.matches_abandoned += 1
         self.current_game_id = ""
+        self.write_user()
+
+    def set_current_game_id(self, game_id):
+        self.current_game_id = game_id
         self.write_user()
     
     def write_user(self):

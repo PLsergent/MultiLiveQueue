@@ -26,7 +26,7 @@ class User(app_commands.Group):
         embed.add_field(name="⚔️ Played", value=user.matches_played, inline=True)
         embed.add_field(name="✅ Won", value=user.matches_won, inline=True)
         embed.add_field(name="😬 Winrate", value=f"{winrate:.2f}%", inline=True)
-        embed.add_field(name="❌ Multiplier", value=user.winstreak_multiplier, inline=True)
+        embed.add_field(name="❌ Multiplier", value=f"{user.winstreak_multiplier:.2f}", inline=True)
         embed.add_field(name="🏅 Ranking", value=user.ranking, inline=True)
         embed.add_field(name="💯 Points", value=user.ranking_points, inline=True)
         await ctx.response.send_message(file=file, embed=embed)

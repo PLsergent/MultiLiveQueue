@@ -16,10 +16,12 @@ class Queue(app_commands.Group):
     @ranked.command(name="captain_queue", description="Queue for a match as a captain")
     async def captain(self, ctx):
         username = ctx.user.name + "#" + ctx.user.discriminator
-        if not self.queue_check(username):
+        if self.queue_check(username):
             embed = self.queue_check(username)
             await ctx.response.send_message(embed=embed)
             return
+
+        self.queues.add_to_ranked_queue(username, "captain_queue")
         
         message = '*🙋‍♂️ Discord Username  |  👾 Multiversus Gamertag*\n\n' + '\n'.join(f'🙋‍♂️ {currentUser}  |  👾 {UserController(currentUser).in_game_username}' for currentUser in self.queues.get_my_queue(username))
 
@@ -29,21 +31,18 @@ class Queue(app_commands.Group):
         match = self.queues.check_if_match_ready(username, "captain_queue")
         if match:
             captain_username = match.team1[0]
-            embed = Embed(title="🎉 Match ready !", description=f"👾 {match.id}, Captain: {captain_username}", color=0x64e4f5)
+            embed = Embed(title="🎉 Match ready! Please pick a teammate", description=f"👾 {match.id}, Captain: **{captain_username}**", color=0x64e4f5)
             await ctx.followup.send(embed=embed)
-            # send ephemeral message to captain to pick a teammate
-            captain = ctx.guild.get_member_named(captain_username)
-            teammates = '*🙋‍♂️ Discord Username  |  👾 Multiversus Gamertag*\n\n' + '\n'.join(f'🙋‍♂️ {currentUser}  |  👾 {UserController(currentUser).in_game_username}' for currentUser in match.available_players)
-            embed_dm = Embed(title="Pick a teammate:", description=teammates, color=0x64e4f5)
-            await captain.send(embed=embed_dm, ephemeral=True)
 
     @ranked.command(name="random_queue", description="Randomly match with someone")
     async def random(self, ctx):
         username = ctx.user.name + "#" + ctx.user.discriminator
-        if not self.queue_check(username):
+        if self.queue_check(username):
             embed = self.queue_check(username)
             await ctx.response.send_message(embed=embed)
             return
+
+        self.queues.add_to_ranked_queue(username, "random_queue")
 
         message = '*🙋‍♂️ Discord Username  |  👾 Multiversus Gamertag*\n\n' + '\n'.join(f'🙋‍♂️ {currentUser}  |  👾 {UserController(currentUser).in_game_username}' for currentUser in self.queues.get_my_queue(username))
 
@@ -63,10 +62,12 @@ class Queue(app_commands.Group):
     @app_commands.command(name="casual", description="Queue for a casual match")
     async def casual(self, ctx):
         username = ctx.user.name + "#" + ctx.user.discriminator
-        if not self.queue_check(username):
+        if self.queue_check(username):
             embed = self.queue_check(username)
             await ctx.response.send_message(embed=embed)
             return
+        
+        self.queues.add_to_casual_queue(username)
         
         message = '*🙋‍♂️ Discord Username  |  👾 Multiversus Gamertag*\n\n' + '\n'.join(f'🙋‍♂️ {currentUser}  |  👾 {UserController(currentUser).in_game_username}' for currentUser in self.queues.get_my_queue(username))
 

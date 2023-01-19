@@ -11,8 +11,8 @@ class MatchController:
     def __init__(self, uuid: str, queue_type=None, players=None):
         if not queue_type and not players:
             # Match already exists
+            self.id = uuid
             match = self.get_match(uuid)
-            self.id = match["id"]
             self.players = match["players"]
             self.available_players = self.players
             self.queue_type = match["queue_type"]
@@ -62,9 +62,9 @@ class MatchController:
         random.shuffle(self.available_players)
         if self.queue_type == "random_queue" or self.queue_type == "casual":
             self.create_random_teams()
+            self.status = "Ready"
         elif self.queue_type == "captain_queue":
             self.create_captain_teams()
-        self.status = "Ready"
         self.write_match()
     
     def create_random_teams(self):
@@ -75,8 +75,8 @@ class MatchController:
     
     def create_captain_teams(self):
         self.team1 = [self.available_players[0]]
-        self.available_players = self.available_players[1:]
-        self.write_match()
+        self.available_players.remove(self.available_players[0])
+        self.write_match()  
     
     def pick_mate(self, username):
         if self.queue_type == "captain_queue":

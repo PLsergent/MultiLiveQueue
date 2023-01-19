@@ -79,6 +79,9 @@ class QueueController:
             if len(self.casual_queue) == 4:
                 game_id = str(uuid.uuid4())
                 match = MatchController(game_id, queue_type=queue_type, players=self.casual_queue)
+                for player in match.players:
+                    user = UserController(player)
+                    user.set_current_game_id(game_id)
                 match.create_teams()
                 self.casual_queue = []
                 return match
@@ -86,6 +89,9 @@ class QueueController:
             if len(self.ranked_queue[user.ranking][queue_type]) == 4:
                 game_id = str(uuid.uuid4())
                 match = MatchController(game_id, queue_type=queue_type, players=self.ranked_queue[user.ranking][queue_type])
+                for player in match.players:
+                    user = UserController(player)
+                    user.set_current_game_id(game_id)
                 match.create_teams()
                 self.ranked_queue[user.ranking][queue_type] = []
                 return match
