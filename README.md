@@ -1,7 +1,3 @@
----
-layout: landing
----
-
 # ⚔ MultiLiveQueue
 
 {% hint style="info" %}
