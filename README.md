@@ -16,4 +16,4 @@ poetry run python bot.py
 
 ### Full documentation here
 
-[https://pl-sergent.gitbook.io/multilivequeue/](https://pl-sergent.gitbook.io/multilivequeue/)
+[https://pl-sergent.gitbook.io/multilivequeue/index](https://pl-sergent.gitbook.io/multilivequeue/index)
