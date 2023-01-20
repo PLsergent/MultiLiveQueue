@@ -1,7 +1,7 @@
 # Table of contents
 
-* [README.md](README.md)
-* [⚔ MultiLiveQueue - Discord bot](index.md)
+* [MultiLiveQueue](README.md)
+* [⚔ Discord bot](index.md)
 * [🤸 Start here](start-here.md)
 
 ## 🦸 User

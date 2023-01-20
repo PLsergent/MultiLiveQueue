@@ -1,12 +1,10 @@
-# README.md
-
-## MultiLiveQueue
+# MultiLiveQueue
 
 Discord bot for Multiversus matchmaking and ranking.
 
 ### Run script
 
-\*Requirements\*: python3, poetry
+**Requirements**: python3, poetry
 
 * Add a  **.env** file with a **TOKEN** variable containing your secret bot token
 
