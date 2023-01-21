@@ -1,7 +1,11 @@
-# ⚔ MultiLiveQueue
+---
+description: Match-making and ranking Discord bot for Multiversus
+---
+
+# ⚔ Discord bot
 
 {% hint style="info" %}
-Match-making and ranking Discord bot for Multiversus
+Documentation for the discord bot MultiLiveQueue :thumbsup:
 {% endhint %}
 
 {% embed url="https://github.com/PLsergent/MultiLiveQueue" %}
@@ -35,3 +39,9 @@ Match-making and ranking Discord bot for Multiversus
 ## More MultiVersus stats here
 
 {% embed url="https://muliversus.plsergent.xyz/" %}
+
+## Contact us to install the bot on your server
+
+Zakichan#7478
+
+PL / Aikawa Towa#5031

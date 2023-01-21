@@ -1,6 +1,8 @@
-# MultiLiveQueue
+---
+description: Discord bot for Multiversus matchmaking and ranking.
+---
 
-Discord bot for Multiversus matchmaking and ranking.
+# MultiLiveQueue
 
 ### Run script
 
