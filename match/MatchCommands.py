@@ -56,7 +56,11 @@ class Match(app_commands.Group):
         await self.create_match_category_and_channels(ctx.guild_id, match, members_team1, members_team2)
 
     @app_commands.command(name="report", description="Report match result")
-    async def report(self, ctx, result: str, score: str):
+    @app_commands.choices(result=[
+        app_commands.Choice(name="win", value="win"),
+        app_commands.Choice(name="loss", value="loss")
+    ])
+    async def report(self, ctx, result: app_commands.Choice[str], score: str):
         username = ctx.user.name + "#" + ctx.user.discriminator
         match = self.get_match_for_user(username)
         if match is None or match.status != "Ready":
@@ -69,11 +73,11 @@ class Match(app_commands.Group):
             await ctx.response.send_message(embed=embed)
             return
 
-        if result == "win":
+        if result.value == "win":
             ko_winner = score.split("-")[0]
             ko_loser = score.split("-")[1]
             match.report_winner(username, int(ko_winner), int(ko_loser))
-        elif result == "loss":
+        elif result.value == "loss":
             ko_winner = score.split("-")[1]
             ko_loser = score.split("-")[0]
             match.report_loser(username, int(ko_winner), int(ko_loser))
