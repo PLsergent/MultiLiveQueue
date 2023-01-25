@@ -17,7 +17,7 @@ tree = app_commands.CommandTree(client)
 
 @app_commands.command(name="help", description="Help command")
 async def help(ctx):
-    embed = Embed(title=f"ℹ️ Help!! ℹ️", description="Simple steps to start using the bot", color=0x64e4f5)
+    embed = Embed(title=f"Help!! ℹ️", description="Simple steps to start using the bot", color=0x64e4f5)
     file = File("./assets/Marvin.png")
     embed.set_thumbnail(url="attachment://Marvin.png")
     embed.add_field(name="1. User", value="/user ingame <your-username>", inline=False)

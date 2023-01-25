@@ -15,6 +15,7 @@ class RankingController:
             if len(leaderboard) >= 10:
                 break
         # return first 10 players
+        leaderboard.sort(key=lambda x: UserController(x).ranking_points, reverse=True)
         return leaderboard[:11]
     
     def get_rank(self, rank):
