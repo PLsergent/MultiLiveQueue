@@ -6,7 +6,7 @@ description: Rank commands to get your rank and the leaderboard
 
 ## me
 
-{% code title="Display your rank" %}
+{% code title="display your rank" %}
 ```
 /rank me
 ```
@@ -16,7 +16,7 @@ description: Rank commands to get your rank and the leaderboard
 
 ## leaderboard
 
-{% code title="Display the leaderboard" %}
+{% code title="display the leaderboard" %}
 ```
 /rank leaderboard
 ```

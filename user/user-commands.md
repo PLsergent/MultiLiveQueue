@@ -1,10 +1,14 @@
 ---
-description: /user commands user specifications
+description: User commands to display user informations
 ---
 
 # User commands
 
 ## ingame
+
+Inputs:
+
+* **in game username:** username in Multiversus
 
 {% code title="set your ingame username" %}
 ```
