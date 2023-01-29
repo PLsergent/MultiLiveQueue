@@ -54,7 +54,7 @@ Note that you can't join a queue if you're in a match or already in an other que
 ```
 /queue casual
 /queue ranked captain_queue
-/queue ranked random
+/queue ranked random_queue
 ```
 {% endcode %}
 
