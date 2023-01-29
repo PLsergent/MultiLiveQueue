@@ -72,23 +72,24 @@ class Match(app_commands.Group):
             embed = Embed(title=f"⚠️ {username}, the score is not valid!", color=0x64e4f5)
             await ctx.response.send_message(embed=embed)
             return
-
-        if result.value == "win":
-            ko_winner = score.split("-")[0]
-            ko_loser = score.split("-")[1]
-            match.report_winner(username, int(ko_winner), int(ko_loser))
-        elif result.value == "loss":
-            ko_winner = score.split("-")[1]
-            ko_loser = score.split("-")[0]
-            match.report_loser(username, int(ko_winner), int(ko_loser))
-        else:
-            embed = Embed(title=f"⚠️ {username}, the result is not valid!", color=0x64e4f5)
-            await ctx.response.send_message(embed=embed)
-            return
+        
+        if match.queue_type != "casual":
+            if result.value == "win":
+                ko_winner = score.split("-")[0]
+                ko_loser = score.split("-")[1]
+                match.report_winner(username, int(ko_winner), int(ko_loser))
+            elif result.value == "loss":
+                ko_winner = score.split("-")[1]
+                ko_loser = score.split("-")[0]
+                match.report_loser(username, int(ko_winner), int(ko_loser))
+            else:
+                embed = Embed(title=f"⚠️ {username}, the result is not valid!", color=0x64e4f5)
+                await ctx.response.send_message(embed=embed)
+                return
 
         embed = Embed(title=f"✅ You reported a {result} for this match.", color=0x64e4f5)
         await ctx.response.send_message(embed=embed)
-        match.status = "reported"
+        match.status = "Reported"
         match.write_match()
         await self.delete_match_category_and_channels(ctx.guild_id, match)
         match.delete_match()
