@@ -12,6 +12,7 @@ class User(app_commands.Group):
 
     @app_commands.command(name="stats", description="Shows your stats on MultiLiveQueue")
     async def stats(self, ctx):
+        await ctx.response.defer()
         username = ctx.user.name + "#" + ctx.user.discriminator
         user = UserController(username)
         if user.matches_played == 0:
@@ -29,7 +30,7 @@ class User(app_commands.Group):
         embed.add_field(name="❌ Multiplier", value=f"{user.winstreak_multiplier:.2f}", inline=True)
         embed.add_field(name="🏅 Ranking", value=user.ranking, inline=True)
         embed.add_field(name="💯 Points", value=user.ranking_points, inline=True)
-        await ctx.response.send_message(file=file, embed=embed)
+        await ctx.followup.send(file=file, embed=embed)
     
     @app_commands.command(name="rank", description="Shows your rank")
     async def rank(self, ctx):

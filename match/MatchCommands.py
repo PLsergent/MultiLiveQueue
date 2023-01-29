@@ -91,7 +91,7 @@ class Match(app_commands.Group):
                 await ctx.response.send_message(embed=embed)
                 return
 
-        embed = Embed(title=f"✅ You reported a {result} for this match.", color=0x64e4f5)
+        embed = Embed(title=f"✅ You reported a {result.value} for this match.", color=0x64e4f5)
         await ctx.response.send_message(embed=embed)
         match.status = "Reported"
         match.write_match()

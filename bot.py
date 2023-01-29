@@ -1,3 +1,4 @@
+import asyncio
 import discord
 from discord import app_commands, Embed, File
 from dotenv import load_dotenv
@@ -17,6 +18,7 @@ tree = app_commands.CommandTree(client)
 
 @app_commands.command(name="help", description="Help command")
 async def help(ctx):
+    await ctx.response.defer(ephemeral=True)
     embed = Embed(title=f"Help!! ℹ️", description="Simple steps to start using the bot", color=0x64e4f5)
     file = File("./assets/Marvin.png")
     embed.set_thumbnail(url="attachment://Marvin.png")
@@ -24,10 +26,11 @@ async def help(ctx):
     embed.add_field(name="2. Queue", value="/queue casual", inline=False)
     embed.add_field(name="3. Report match", value="/match report win 4-2", inline=False)
     embed.add_field(name="4. Check your stats", value="/user stats", inline=False)
-    await ctx.response.send_message(file=file, embed=embed)
+    await ctx.followup.send(file=file, embed=embed)
 
 @client.event
 async def on_ready():
+    await client.wait_until_ready()
     tree.add_command(Queue(client))
     tree.add_command(User())
     tree.add_command(Rank())
