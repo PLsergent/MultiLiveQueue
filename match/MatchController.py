@@ -123,6 +123,9 @@ class MatchController:
             user.decrease_rank_points(diff)
     
     def abandon_match(self, username):
+        user = UserController(username)
+        user.abandon_match()
+        user.write_user() 
         if username in self.available_players:
             self.available_players.remove(username)
         if username in self.team1:
@@ -138,9 +141,6 @@ class MatchController:
         if self.players == []:
             self.delete_match()
             return True
-        user = UserController(username)
-        user.abandon_match()
-        user.write_user()       
         self.write_match()
         return False
 

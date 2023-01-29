@@ -37,6 +37,10 @@ class Match(app_commands.Group):
             embed = Embed(title=f"⚠️ {username}, you are not in a match!", color=0x64e4f5)
             await ctx.response.send_message(embed=embed)
             return
+        if match.queue_type != "captain_queue":
+            embed = Embed(title=f"⚠️ {username}, you are not in a captain queue!", color=0x64e4f5)
+            await ctx.response.send_message(embed=embed)
+            return
         if username not in match.team1:
             embed = Embed(title=f"⚠️ {username}, you are not the captain!", color=0x64e4f5)
             await ctx.response.send_message(embed=embed)
