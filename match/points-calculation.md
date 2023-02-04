@@ -8,7 +8,7 @@ description: How many ranking points can I win or lose?
 
 At the end of a ranked match, once one of the players reported the match, the ranking points will be updated. The ranking points won/lost after a match depends on 2 factors:
 
-* Difference between the KOs of the two teams
+* Difference between the KOs of the two teams (if one game) / or difference between the games won (if BO match)
 * Win streak multiplier
 
 {% hint style="info" %}
@@ -19,11 +19,14 @@ You always start with 0 points.
 
 ## Calculation
 
-1. Difference between your KOs and enemy team KOs, or difference between number of games you won and the number of games the enemy won.
+1. Difference between&#x20;
+   * Your KOs and enemy team KOs (if one game)
+   * OR
+   * Number of games you won and number of games won by the enemy (if BO match)
 2. Multiply the difference with your win streak multiplier (only when winning)
 
 $$
-points\_gained = kos\_difference * multiplier
+points\_gained = difference * multiplier
 $$
 
 ## Examples
@@ -74,5 +77,5 @@ In order to reward the players that are winning a lot of games in a row, the bot
 * Loss: reset win streak multiplier to **1**
 
 {% hint style="info" %}
-If you win a match the multiplier will be taken into account.
+If you win a match the multiplier will be taken into account. If you lose the multiplier is not taken into account.
 {% endhint %}

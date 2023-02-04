@@ -11,7 +11,7 @@ Once a match has started, each team will have a **dedicated voice and text chann
 Inputs:
 
 * **result** of the match for you, either "win" or "loss"
-* **score** of the match always from **your perspective** meaning, you lost, the enemy have 4 KOs and you have 2, then you'll input "2-4" (you can also refer to the score as a BO match with several games)
+* **score** of the match, always from **your perspective** meaning, you lost, the enemy have 4 KOs and you have 2, then you'll input "2-4" (you can also refer to the score as a BO match with several games, for instance you won 2 games to 1 in the match then enter "2-1")
 
 {% code title="to report a match with result and score" %}
 ```
