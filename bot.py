@@ -26,6 +26,7 @@ async def help(ctx):
     embed.add_field(name="2. Queue", value="/queue casual", inline=False)
     embed.add_field(name="3. Report match", value="/match report win 4-2", inline=False)
     embed.add_field(name="4. Check your stats", value="/user stats", inline=False)
+    embed.add_field(name="Full doc:", value="https://pl-sergent.gitbook.io/multilivequeue/", inline=False)
     await ctx.followup.send(file=file, embed=embed)
 
 @client.event
