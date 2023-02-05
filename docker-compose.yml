@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  multilivequeue:
+    image: multilivequeue:latest
+    container_name: multilivequeue_container
+    volumes:
+      - ./data:/data
+      - ./data/matches:/data/matches
+      - ./data/players:/data/players
