@@ -1,1 +1,22 @@
-{"S": {"min_points": 100, "players": []}, "A": {"min_points": 75, "players": []}, "B": {"min_points": 50, "players": []}, "C": {"min_points": 25, "players": []}, "D": {"min_points": 0, "players": ["PL / Aikawa Towa#5031", "Azukine#6257", "Holapapalouis#6220", "PCS Psycoquaxe#3138"]}}
+{
+    "S": {
+        "min_points": 100,
+        "players": []
+    },
+    "A": {
+        "min_points": 75,
+        "players": []
+    },
+    "B": {
+        "min_points": 50,
+        "players": []
+    },
+    "C": {
+        "min_points": 25,
+        "players": []
+    },
+    "D": {
+        "min_points": 0,
+        "players": []
+    }
+}
