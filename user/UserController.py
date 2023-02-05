@@ -122,6 +122,10 @@ class UserController():
         self.ranking = new_rank
         self.write_user()
     
+    def exit_casual_match(self):
+        self.current_game_id = ""
+        self.write_user()
+    
     def abandon_match(self):
         self.matches_abandoned += 1
         self.current_game_id = ""

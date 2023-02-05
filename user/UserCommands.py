@@ -20,7 +20,7 @@ class User(app_commands.Group):
         else:
             winrate = (user.matches_won/user.matches_played)*100
 
-        embed = Embed(title=f"📊 {username} stats!", color=0x64e4f5)
+        embed = Embed(title=f"📊 {username} ranked stats!", color=0x64e4f5)
         file = File("./assets/Marvin.png")
         embed.set_thumbnail(url="attachment://Marvin.png")
         embed.add_field(name="In-game", value=user.in_game_username, inline=False)
@@ -29,7 +29,7 @@ class User(app_commands.Group):
         embed.add_field(name="😬 Winrate", value=f"{winrate:.2f}%", inline=True)
         embed.add_field(name="❌ Multiplier", value=f"{user.winstreak_multiplier:.2f}", inline=True)
         embed.add_field(name="🏅 Ranking", value=user.ranking, inline=True)
-        embed.add_field(name="💯 Points", value=user.ranking_points, inline=True)
+        embed.add_field(name="💯 Points", value=f"{user.ranking_points:.2f}", inline=True)
         await ctx.followup.send(file=file, embed=embed)
     
     @app_commands.command(name="rank", description="Shows your rank")

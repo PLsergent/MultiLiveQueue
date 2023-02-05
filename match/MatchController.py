@@ -112,6 +112,11 @@ class MatchController:
         self.status = "Finished"
         self.write_match()
     
+    def report_casual(self):
+        for player in self.team1 + self.team2:
+            user = UserController(player)
+            user.exit_casual_match()
+    
     def increase_rank_points(self, team, diff):
         for player in team:
             user = UserController(player)
@@ -134,11 +139,8 @@ class MatchController:
             self.team2.remove(username)
         if username in self.players:
             self.players.remove(username)
-        if len(self.team1) == 0 and len(self.team2) == 0:
+        if (len(self.team1) == 0 and len(self.team2) == 0) or self.players == []:
             self.status = "Abandoned"
-            self.delete_match()
-            return True
-        if self.players == []:
             self.delete_match()
             return True
         self.write_match()

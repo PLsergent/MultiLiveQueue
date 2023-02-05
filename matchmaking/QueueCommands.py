@@ -26,6 +26,7 @@ class Queue(app_commands.Group):
         message = '*🙋‍♂️ Discord Username  |  👾 Multiversus Gamertag*\n\n' + '\n'.join(f'🙋‍♂️ {currentUser}  |  👾 {UserController(currentUser).in_game_username}' for currentUser in self.queues.get_my_queue(username))
 
         embed = Embed(title="🆕 challenger to the *ranked captain* queue !", description=message, color=0xd96664)
+        embed.add_field(name="Rank", value=f"🏆 **{UserController(username).ranking}**")
         await ctx.response.send_message(embed=embed)
 
         match = self.queues.check_if_match_ready(username, "captain_queue")
@@ -48,7 +49,8 @@ class Queue(app_commands.Group):
 
         message = '*🙋‍♂️ Discord Username  |  👾 Multiversus Gamertag*\n\n' + '\n'.join(f'🙋‍♂️ {currentUser}  |  👾 {UserController(currentUser).in_game_username}' for currentUser in self.queues.get_my_queue(username))
 
-        embed = Embed(title="🆕 challenger to the *ranked random* queue !", description=message, color=0xd96664)
+        embed = Embed(title=f"🆕 challenger to the *ranked random* queue !", description=message, color=0xd96664)
+        embed.add_field(name="Rank", value=f"🏆 **{UserController(username).ranking}**")
         await ctx.response.send_message(embed=embed)
 
         match = self.queues.check_if_match_ready(username, "random_queue")

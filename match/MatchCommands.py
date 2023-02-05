@@ -79,17 +79,29 @@ class Match(app_commands.Group):
         
         if match.queue_type != "casual":
             if result.value == "win":
-                ko_winner = score.split("-")[0]
-                ko_loser = score.split("-")[1]
-                match.report_winner(username, int(ko_winner), int(ko_loser))
+                ko_winner = int(score.split("-")[0])
+                ko_loser = int(score.split("-")[1])
+                if ko_winner > ko_loser and ko_winner <= 2:
+                    match.report_winner(username, ko_winner, ko_loser)
+                else:
+                    embed = Embed(title=f"⚠️ {username}, the score is not valid!", color=0x64e4f5)
+                    await ctx.response.send_message(embed=embed)
+                    return
             elif result.value == "loss":
-                ko_winner = score.split("-")[1]
-                ko_loser = score.split("-")[0]
-                match.report_loser(username, int(ko_winner), int(ko_loser))
+                ko_winner = int(score.split("-")[1])
+                ko_loser = int(score.split("-")[0])
+                if ko_winner < ko_loser and ko_winner <= 2:
+                    match.report_loser(username, ko_winner, ko_loser)
+                else:
+                    embed = Embed(title=f"⚠️ {username}, the score is not valid!", color=0x64e4f5)
+                    await ctx.response.send_message(embed=embed)
+                    return
             else:
                 embed = Embed(title=f"⚠️ {username}, the result is not valid!", color=0x64e4f5)
                 await ctx.response.send_message(embed=embed)
                 return
+        else:
+            match.report_casual()
 
         embed = Embed(title=f"✅ You reported a {result.value} for this match.", color=0x64e4f5)
         await ctx.response.send_message(embed=embed)
@@ -113,7 +125,8 @@ class Match(app_commands.Group):
             await ctx.response.send_message(embed=embed)
             return
         
-        match.abandon_match(username)
+        if match.abandon_match(username):
+            await self.delete_match_category_and_channels(ctx.guild_id, match)
         embed = Embed(title=f"✅ You abandoned this match.", color=0x64e4f5)
         await ctx.response.send_message(embed=embed)
     
