@@ -5,6 +5,6 @@ services:
     image: multilivequeue:latest
     container_name: multilivequeue_container
     volumes:
-      - ./data:/data
-      - ./data/matches:/data/matches
-      - ./data/players:/data/players
+      - ./data:/app/data
+      - ./data/matches:/app/data/matches
+      - ./data/players:/app/data/players
