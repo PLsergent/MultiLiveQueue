@@ -16,7 +16,7 @@ class RankingController:
                 break
         # return first 10 players
         leaderboard.sort(key=lambda x: UserController(x).ranking_points, reverse=True)
-        return leaderboard[:11]
+        return leaderboard[:10]
     
     def get_full_leaderboard(self):
         with open(PATH + "ranks.json", "r") as f:

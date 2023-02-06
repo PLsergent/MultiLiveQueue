@@ -19,7 +19,7 @@ class Rank(app_commands.Group):
         embed.set_thumbnail(url="attachment://Marvin.png")
         for i, player in enumerate(leaderboard):
             user = UserController(player)
-            embed.add_field(name=f"{i + 1}. {player}", value=f"Rank: {user.ranking}\nPoints: {user.ranking_points}", inline=False)
+            embed.add_field(name=f"{i + 1}. {player}", value=f"Rank: {user.ranking}\nPoints: {user.ranking_points:.2f}", inline=False)
         user_leaderboard = self.ranks.get_player_global_ranking(ctx.user.name + "#" + ctx.user.discriminator)
         embed.set_footer(text=f"Your global rank: n° {user_leaderboard + 1}")
         await ctx.followup.send(file=file, embed=embed)
