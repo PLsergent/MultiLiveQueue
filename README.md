@@ -12,6 +12,8 @@ description: Discord bot for Multiversus matchmaking and ranking.
 
 ```
 mv example.env .env
+mv mock-data data
+
 poetry install
 poetry run python bot.py
 ```
