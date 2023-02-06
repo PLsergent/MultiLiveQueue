@@ -144,10 +144,10 @@ class Queue(app_commands.Group):
 
         for member in team1:
             await team1_text_channel.set_permissions(member, read_messages=True, send_messages=True)
-            await team1_voice_channel.set_permissions(member, connect=True, speak=True, view_channel=True)
+            await team1_voice_channel.set_permissions(member, connect=True, speak=True, view_channel=True, use_voice_activation=True)
         
         team2_text_channel = await guild.create_text_channel(f"Team 2", category=category)
         team2_voice_channel = await guild.create_voice_channel(f"Team 2", category=category)
         for member in team2:
             await team2_text_channel.set_permissions(member, read_messages=True, send_messages=True)
-            await team2_voice_channel.set_permissions(member, connect=True, speak=True, view_channel=True)
+            await team2_voice_channel.set_permissions(member, connect=True, speak=True, view_channel=True, use_voice_activation=True)
