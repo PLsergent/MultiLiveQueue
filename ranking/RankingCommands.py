@@ -36,4 +36,4 @@ class Rank(app_commands.Group):
         embed.add_field(name="Global rank", value=f"n° {user_leaderboard}", inline=False)
         file = File("./assets/Marvin.png")
         embed.set_thumbnail(url="attachment://Marvin.png")
-        await ctx.followup.send_message(file=file, embed=embed)
+        await ctx.followup.send(file=file, embed=embed)
