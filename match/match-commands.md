@@ -62,9 +62,11 @@ Effects:
 * The player will be removed from the available players and/or from the team of the match, as a result, if the match is still reported this will have no effects on the player ranking points.&#x20;
 * If the match has no more players in it, then the match will be deleted. As a result, all the players have to abandon a match for the match to be deleted. This has been made to prevent abuses.&#x20;
 
-## :man\_scientist: delete channels
+## delete\_channels :warning:
 
-_Admin command_
+{% hint style="info" %}
+Admin command only
+{% endhint %}
 
 {% code title="to delete all match channels still opened" %}
 ```
