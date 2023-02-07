@@ -1,5 +1,7 @@
 import discord
 from discord import app_commands, Embed
+from discord.ext.commands import MissingPermissions
+
 from matchmaking.QueueController import QueueController
 from user.UserController import UserController
 
@@ -87,6 +89,46 @@ class Queue(app_commands.Group):
             embed = Embed(title="🎉 Match ready !", description=f"👾 Match id: {match.id}", color=0x64e4f5)
             await ctx.followup.send(embed=embed)
             await self.create_match_category_and_channels(ctx.guild_id, match, members_team1, members_team2)
+    
+    @app_commands.command(name="empty_all_queues", description="Empty all queues")
+    @app_commands.checks.has_permissions(administrator=True)
+    async def empty_all_queues(self, ctx):
+        self.queues.empty_all_queues()
+        embed = Embed(title="✅ All queues have been emptied", color=0x64e4f5)
+        await ctx.response.send_message(embed=embed)
+    
+    @empty_all_queues.error
+    async def empty_all_queues_error(self, ctx, error):
+        await ctx.response.send_message(error)
+    
+    async def player_in_queues(self, ctx, current: str):
+        return [
+                app_commands.Choice(name=user, value=user)
+                for user in self.queues.get_all_players_in_queues()
+            ]
+    
+    @app_commands.command(name="kick", description="Kick a player from a queue")
+    @app_commands.autocomplete(user=player_in_queues)
+    @app_commands.checks.has_permissions(administrator=True)
+    async def kick(self, ctx, user: str):
+        if self.queues.remove_from_casual_queue(user):
+            embed = Embed(title=f"✅ {user}, has been removed from casual queue!", color=0x64e4f5)
+            await ctx.response.send_message(embed=embed)
+            return
+        if self.queues.remove_from_ranked_queue(user, "captain_queue"):
+            embed = Embed(title=f"✅ {user}, has been removed from ranked captain queue!", color=0x64e4f5)
+            await ctx.response.send_message(embed=embed)
+            return
+        if self.queues.remove_from_ranked_queue(user, "random_queue"):
+            embed = Embed(title=f"✅ {user}, has been removed from ranked random queue!", color=0x64e4f5)
+            await ctx.response.send_message(embed=embed)
+            return
+        embed = Embed(title=f"⚠️ {user}, is not in any queue!", color=0x64e4f5)
+        await ctx.response.send_message(embed=embed)
+    
+    @kick.error
+    async def kick_error(self, ctx, error):
+        await ctx.response.send_message(error)
 
     @app_commands.command(name="leave", description="Leave the queue")
     async def leave(self, ctx):

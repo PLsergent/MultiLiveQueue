@@ -1,0 +1,28 @@
+name: Deploy latest taged version
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: Executing remote ssh commands
+      uses: garygrossgarten/github-action-ssh@release
+      with:
+        command: |
+          cd MultiLiveQueue
+          git config --global user.email "papa.louis59@gmail.com"
+          git config --global user.name "Pierre-Louis Sergent"
+          git pull
+          docker stop multilivequeue_container
+          docker rm multilivequeue_container
+          docker image rm multilivequeue
+          docker build -t multilivequeue .
+          docker-compose up -d
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        passphrase: ${{ secrets.PASSWORD }}
+        privateKey: ${{ secrets.KEY }}

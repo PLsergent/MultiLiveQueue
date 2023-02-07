@@ -37,6 +37,31 @@ class QueueController:
                 return True
         return False
 
+    def empty_all_queues(self):
+        self.ranked_queue = {
+            "S": {
+                "captain_queue": [],
+                "random_queue": []
+            },
+            "A": {
+                "captain_queue": [],
+                "random_queue": []
+            },
+            "B": {
+                "captain_queue": [],
+                "random_queue": []
+            },
+            "C": {
+                "captain_queue": [],
+                "random_queue": []
+            },
+            "D": {
+                "captain_queue": [],
+                "random_queue": []
+            }
+        }
+        self.casual_queue = []
+
     def add_to_ranked_queue(self, username, queue_type):
         if self.is_in_queue(username):
             return False
@@ -72,6 +97,14 @@ class QueueController:
         if username in self.ranked_queue[user.ranking]["random_queue"]:
             return self.ranked_queue[user.ranking]["random_queue"]
         return None
+    
+    def get_all_players_in_queues(self):
+        players = []
+        for queue in self.ranked_queue:
+            for queue_type in self.ranked_queue[queue]:
+                players += self.ranked_queue[queue][queue_type]
+        players += self.casual_queue
+        return players
     
     def check_if_match_ready(self, username, queue_type):
         user = UserController(username)

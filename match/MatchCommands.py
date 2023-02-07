@@ -1,6 +1,7 @@
 import discord
-from discord import app_commands
-from discord import Embed
+from discord import app_commands, Embed
+from discord.ext.commands import has_permissions, MissingPermissions
+
 from match.MatchController import MatchController
 from user.UserController import UserController
 import re
@@ -111,11 +112,16 @@ class Match(app_commands.Group):
         match.delete_match()
 
     @app_commands.command(name="delete_channels", description="Delete match categories and channels")
+    @app_commands.checks.has_permissions(administrator=True)
     async def delete_channels(self, ctx):
         await self.delete_match_all_category_and_channels(ctx.guild_id)
         embed = Embed(title=f"✅ You deleted the match channels.", color=0x64e4f5)
         await ctx.response.send_message(embed=embed)
     
+    @delete_channels.error
+    async def delete_channels_error(self, ctx, error):
+        await ctx.response.send_message(error)
+        
     @app_commands.command(name="abandon", description="Abandon match")
     async def abandon(self, ctx):
         username = ctx.user.name + "#" + ctx.user.discriminator
